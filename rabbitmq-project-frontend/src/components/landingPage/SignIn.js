@@ -1,6 +1,6 @@
 import React, { useState } from "react";
 import { Card, CardBody, Form, FormGroup, Input, Label } from "reactstrap";
-import apireq from "../../apihandle/handleSampleApi";
+import { logIn } from "../../apihandle/authentication";
 
 function SignIn(props) {
 
@@ -23,7 +23,7 @@ function SignIn(props) {
     const handleSubmit = (event) => {
         event.preventDefault();
         console.log(initialState)
-        console.log(apireq())
+        logIn(initialState)
         setState({email:'', password: ''});
     }
 
