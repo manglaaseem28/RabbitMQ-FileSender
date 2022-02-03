@@ -1,11 +1,30 @@
-import React from "react";
+import React, { useState } from "react";
 import { Card, CardBody, Form, FormGroup, Input, Label } from "reactstrap";
 import apireq from "../../apihandle/handleSampleApi";
 
 function SignIn(props) {
 
-    const handleSubmit = () => {
-        apireq();
+    const [initialState, setState] = useState(
+        {
+            email:'',
+            password: ''
+        }
+    );
+
+    const handleInputChange = (event) => {
+        const name = event.target.name;
+        const value = event.target.value
+        setState({
+            ...initialState,
+            [name]: value
+        })
+    }
+
+    const handleSubmit = (event) => {
+        event.preventDefault();
+        console.log(initialState)
+        console.log(apireq())
+        setState({email:'', password: ''});
     }
 
   return (
@@ -19,9 +38,11 @@ function SignIn(props) {
                 Email
               </Label>
               <Input
-                name="Email"
+                name="email"
                 id="userEmail"
                 placeholder="Enter Your Email"
+                value={initialState.email}
+                onChange={handleInputChange}
                 required
                 type="email"
               />
@@ -34,6 +55,8 @@ function SignIn(props) {
                 name="password"
                 id="userPassword"
                 placeholder="Enter Password"
+                value={initialState.password}
+                onChange={handleInputChange}
                 required
                 type="password"
               />
