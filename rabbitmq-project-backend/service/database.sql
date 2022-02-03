@@ -2,8 +2,9 @@ CREATE DATABASE employee_database;
 
 --\c into employee_databse
 
-CREATE TABLE employee(
-    employee_id SERIAL PRIMARY KEY,
+CREATE TABLE if not exists employee(
+    employee_id serial PRIMARY KEY,
+    employee_email VARCHAR(255) UNIQUE,
     employee_name VARCHAR(255),
     designation VARCHAR(60),
     password VARCHAR(100)
