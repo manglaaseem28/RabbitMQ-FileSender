@@ -32,6 +32,7 @@
 // export default Dashboard;
 
 import React from "react";
+import NavDash from "./NavDash";
 import UploadFile from "./UploadFile";
 
 class Dashboard extends React.Component {
@@ -46,6 +47,7 @@ class Dashboard extends React.Component {
   render() {
     return (
       <div>
+        <NavDash/>
         <h1 className="text-center mb-4">Dashboard</h1>
         <UploadFile/>
       </div>

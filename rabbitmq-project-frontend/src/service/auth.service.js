@@ -34,4 +34,5 @@ export const registerUser = async(userCredentials) =>{
 
 export const logout = () => {
     localStorage.removeItem('user');
+    window.location.reload()
 }
