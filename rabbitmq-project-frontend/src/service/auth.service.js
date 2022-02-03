@@ -10,12 +10,13 @@ export const logIn = async(userLogInCredentials) =>{
         data = result.data;
         if (data.accessToken) {
             localStorage.setItem("user", JSON.stringify(data));
+            return result
           }
 
     }).catch((err) => {
         console.error(err);
     });
-    console.log(data)
+    // console.log(data)
 }
 
 export const registerUser = async(userCredentials) =>{
@@ -29,4 +30,8 @@ export const registerUser = async(userCredentials) =>{
         console.error(err);
     });
     console.log(data);
+}
+
+export const logout = () => {
+    localStorage.removeItem('user');
 }
