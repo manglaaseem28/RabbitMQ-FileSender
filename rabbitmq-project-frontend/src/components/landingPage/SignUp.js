@@ -1,6 +1,6 @@
 import React, { useState } from "react";
 import { Card, CardBody, Form, FormGroup, Input, Label } from "reactstrap";
-import { registerUser } from "../../apihandle/authentication";
+import { registerUser } from "../../service/auth.service";
 
 
 function SignUp(props) {

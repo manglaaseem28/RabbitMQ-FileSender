@@ -1,9 +1,18 @@
-import React, { useState } from "react";
+import React, { useEffect, useState } from "react";
+import { useNavigate } from "react-router-dom";
 import { Container } from "reactstrap";
 import SignIn from "./SignIn";
 import SignUp from "./SignUp";
 
-function LandingPage() {
+function LandingPage(props) {
+  const history = useNavigate();
+  const isAuthenticated = props.isAuthenticated;
+
+  useEffect(() => {
+    console.log('hey',isAuthenticated)
+    if (isAuthenticated){ 
+    history('/dashboard')}
+  });
   const [isRegistered, setisRegistered] = useState(true);
 
   const changeLoggingState = () => {
@@ -20,7 +29,7 @@ function LandingPage() {
       >
         <div className="w-100" style={{ maxWidth: "500px" }}>
           {isRegistered ? (
-            <SignIn register={changeLoggingState} />
+            <SignIn register={changeLoggingState} history={history} />
           ) : (
             <SignUp logIn={changeLoggingState} />
           )}

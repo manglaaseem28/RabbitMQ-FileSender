@@ -1,6 +1,6 @@
 import React, { useState } from "react";
 import { Card, CardBody, Form, FormGroup, Input, Label } from "reactstrap";
-import { logIn } from "../../apihandle/authentication";
+import { logIn } from "../../service/auth.service";
 
 function SignIn(props) {
 
@@ -23,7 +23,17 @@ function SignIn(props) {
     const handleSubmit = (event) => {
         event.preventDefault();
         console.log(initialState)
-        logIn(initialState)
+
+        logIn(initialState).then(
+          () => {
+          props.history('/dashboard');
+          window.location.reload();
+        },
+        (error) => {
+          console.error(error);
+        }
+        )
+
         setState({email:'', password: ''});
     }
 
