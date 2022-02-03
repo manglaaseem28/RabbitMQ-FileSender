@@ -1,18 +1,24 @@
 import React from "react";
-import { Card, CardBody, Form, FormGroup, Label } from "reactstrap";
+import { Card, CardBody, Form, FormGroup, Input, Label } from "reactstrap";
+import apireq from "../../apihandle/handleSampleApi";
 
 function SignIn(props) {
+
+    const handleSubmit = () => {
+        apireq();
+    }
+
   return (
-    // <div>
+    <div>
       <Card>
         <CardBody>
           <h2 className="text-center mb-4">Sign In</h2>
-          <Form className="Sign-In-Form">
+          <Form className="Sign-In-Form" onSubmit={handleSubmit}>
             <FormGroup>
               <Label htmlFor="email" className="form-label">
                 Email
               </Label>
-              <input
+              <Input
                 name="Email"
                 id="userEmail"
                 placeholder="Enter Your Email"
@@ -24,7 +30,7 @@ function SignIn(props) {
               <label htmlFor="userPassword" className="form-label">
                 Password
               </label>
-              <input
+              <Input
                 name="password"
                 id="userPassword"
                 placeholder="Enter Password"
@@ -44,7 +50,7 @@ function SignIn(props) {
             </div>
         </CardBody>
       </Card>
-    // </div>
+    </div>
   );
 }
 

@@ -1,5 +1,5 @@
 import React from "react";
-import { Card, CardBody, Form, FormGroup, Label } from "reactstrap";
+import { Card, CardBody, Form, FormGroup, Input, Label } from "reactstrap";
 
 function SignUp(props) {
   return (
@@ -12,7 +12,7 @@ function SignUp(props) {
               <Label htmlFor="name" className="form-label">
                 Name
               </Label>
-              <input
+              <Input
                 name="name"
                 id="userName"
                 placeholder="Enter Your Name"
@@ -24,7 +24,7 @@ function SignUp(props) {
               <Label htmlFor="email" className="form-label">
                 Email
               </Label>
-              <input
+              <Input
                 name="email"
                 id="userEmail"
                 placeholder="Enter Your Email"
@@ -36,7 +36,7 @@ function SignUp(props) {
               <Label htmlFor="designation" className="form-label">
                 Designation
               </Label>
-              <input
+              <Input
                 name="designation"
                 id="userDesignation"
                 placeholder="Enter Your Designation"
@@ -48,7 +48,7 @@ function SignUp(props) {
               <label htmlFor="userPassword" className="form-label">
                 Password
               </label>
-              <input
+              <Input
                 name="password"
                 id="userPassword"
                 placeholder="Enter Password"
