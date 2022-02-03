@@ -2,12 +2,16 @@ const router = require("express").Router();
 
 const {
   sendUserData,
-  authenticateUser,
   authenticateToken,
   refreshAccessToken,
   logout,
+  authoriseUser,
 } = require("../controller/template");
-const { addUser, getEmployes } = require("../controller/user");
+const {
+  registerUser,
+  getEmployes,
+  authenticateUser,
+} = require("../controller/user");
 const app = require("../server");
 
 router.get("/userData", authenticateToken, sendUserData);
@@ -16,11 +20,11 @@ router.get("/userData", authenticateToken, sendUserData);
 
 // Register an Employee--- ADD User
 
-router.post("/adduser", addUser);
+router.post("/register", registerUser);
 
 router.get("/alluser", getEmployes);
 
-router.post("/login", authenticateUser);
+router.post("/login", authenticateUser, authoriseUser);
 
 router.post("/token", refreshAccessToken);
 

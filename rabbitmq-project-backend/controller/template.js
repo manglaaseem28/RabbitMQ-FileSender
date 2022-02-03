@@ -1,18 +1,5 @@
 const jwt = require("jsonwebtoken");
 
-const userData = [
-  {
-    name: "Aseem Mangla",
-    designation: "Intern",
-    password: "aseem",
-  },
-  {
-    name: "Arpit",
-    designation: "Intern",
-    password: "arpit",
-  },
-];
-
 let refreshTokens = [];
 
 const sendUserData = (req, res) => {
@@ -36,34 +23,21 @@ const addUser = (req, res) => {
 };
 
 const generateAccessToken = (user) => {
-  return jwt.sign(user, process.env.ACCESS_TOKEN_SECRET, { expiresIn: "55s" });
+  return jwt.sign(user, process.env.ACCESS_TOKEN_SECRET, { expiresIn: "1m" });
 };
 
-const authenticateUser = (req, res) => {
-  const username = req.body.name;
-  const password = req.body.password;
-  const designation = req.body.designation;
-  const user = { name: username, designation: designation, password: password };
+const authoriseUser = (req, res) => {
+  try {
+    const accessToken = generateAccessToken(req.user);
+    const refreshToken = jwt.sign(req.user, process.env.REFRESH_TOKEN_SECRET);
+    refreshTokens.push(refreshToken);
 
-  // Authentication
-  userData.filter(u => {
-    console.log((u.name == user.name && u.designation == user.designation && u.password == user.password)==true)
-     if(
-      u.name == user.name &&
-      u.designation == user.designation &&
-      u.password == user.password
-     ) {
-      const accessToken = generateAccessToken(user);
-      const refreshToken = jwt.sign(user, process.env.REFRESH_TOKEN_SECRET);
-      refreshTokens.push(refreshToken);
-    
-      res.json({ accessToken: accessToken, refreshToken: refreshToken });
-      res.sendStatus(200);
-     }
-  }) 
-    
-  
-   return res.sendStatus(403);
+    res.json({ accessToken: accessToken, refreshToken: refreshToken });
+    res.sendStatus(200);
+  } catch (error) {
+    console.error(error);
+    res.sendStatus(403);
+  }
 };
 
 const authenticateToken = (req, res, next) => {
@@ -85,21 +59,21 @@ const refreshAccessToken = (req, res) => {
   if (!refreshTokens.includes(refreshToken)) return res.sendStatus(403);
   jwt.verify(refreshToken, process.env.REFRESH_TOKEN_SECRET, (err, user) => {
     if (err) return res.sendStatus(403);
-    const accessToken = generateAccessToken({name: user.name});
-    res.json({accessToken: accessToken})
+    const accessToken = generateAccessToken({ name: user.name });
+    res.json({ accessToken: accessToken });
   });
 };
 
 const logout = (req, res) => {
-  refreshTokens = refreshTokens.filter(token => token !== req.body.token)
-  res.sendStatus(204)
-}
+  refreshTokens = refreshTokens.filter((token) => token !== req.body.token);
+  res.sendStatus(204);
+};
 
 module.exports = {
   sendUserData,
   addUser,
-  authenticateUser,
+  authoriseUser,
   authenticateToken,
   refreshAccessToken,
-  logout
+  logout,
 };

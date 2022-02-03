@@ -1,13 +1,40 @@
-import React from "react";
+import React, { useState } from "react";
 import { Card, CardBody, Form, FormGroup, Input, Label } from "reactstrap";
+import { registerUser } from "../../apihandle/authentication";
+
 
 function SignUp(props) {
+  const [initialState, setState] = useState(
+    {
+        email:'',
+        password: '',
+        name: '',
+        designation: ''
+    }
+);
+
+const handleInputChange = (event) => {
+    const name = event.target.name;
+    const value = event.target.value
+    setState({
+        ...initialState,
+        [name]: value
+    })
+}
+
+const handleSubmit = (event) => {
+    event.preventDefault();
+    console.log(initialState)
+    registerUser(initialState)
+    setState({email:'', password: '', name: '', designation: ''});
+}
+
   return (
     <div>
       <Card>
         <CardBody>
           <h2 className="text-center mb-4">Sign Up</h2>
-          <Form className="Sign-Up-Form mb-3">
+          <Form className="Sign-Up-Form mb-3" onSubmit={handleSubmit}>
           <FormGroup>
               <Label htmlFor="name" className="form-label">
                 Name
@@ -16,6 +43,8 @@ function SignUp(props) {
                 name="name"
                 id="userName"
                 placeholder="Enter Your Name"
+                value={initialState.name}
+                onChange={handleInputChange}
                 required
                 type="text"
               />
@@ -28,6 +57,8 @@ function SignUp(props) {
                 name="email"
                 id="userEmail"
                 placeholder="Enter Your Email"
+                value={initialState.email}
+                onChange={handleInputChange}
                 required
                 type="email"
               />
@@ -40,6 +71,8 @@ function SignUp(props) {
                 name="designation"
                 id="userDesignation"
                 placeholder="Enter Your Designation"
+                value={initialState.designation}
+                onChange={handleInputChange}
                 required
                 type="text"
               />
@@ -52,6 +85,8 @@ function SignUp(props) {
                 name="password"
                 id="userPassword"
                 placeholder="Enter Password"
+                value={initialState.password}
+                onChange={handleInputChange}
                 required
                 type="password"
               />
