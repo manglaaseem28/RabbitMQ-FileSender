@@ -41,37 +41,52 @@ class UploadFile extends React.Component {
     this.state = {
       file: null,
     };
-    this.onFormSubmit = this.onFormSubmit.bind(this);
+    // this.onFormSubmit = this.onFormSubmit.bind(this);
     this.onChange = this.onChange.bind(this);
-    this.fileUpload = this.fileUpload.bind(this);
+    // this.fileUpload = this.fileUpload.bind(this);
   }
-  onFormSubmit(e) {
-    e.preventDefault(); // Stop form submit
-    this.fileUpload(this.state.file).then((response) => {
-      console.log(response.data);
-    });
-  }
+  // onFormSubmit(e) {
+  //   e.preventDefault(); // Stop form submit
+  //   this.fileUpload(this.state.file).then((response) => {
+  //     console.log(response.data);
+  //   });
+  // }
   onChange(e) {
-    this.setState({ file: e.target.files[0] });
+    console.log(e.target.files[0]);
+    this.setState({ file: e.target.files[0], loaded: 0 });
   }
-  fileUpload(file) {
-    const url = "http://example.com/file-upload";
-    const formData = new FormData();
-    formData.append("file", file);
-    const config = {
-      headers: {
-        "content-type": "multipart/form-data",
-      },
-    };
-    return axios.post(url, formData, config);
-  }
+
+  onClick = (e) => {
+    e.preventDefault();
+    const data = new FormData();
+    data.append("file", this.state.file);
+    axios
+      .post("http://localhost:8000/upload", data, {})
+      .then((res) => {
+        console.log(res.statusText);
+      })
+      .catch((e) => {
+        console.log(e);
+      });
+  };
+  // fileUpload(file) {
+  //   const url = "http://localhost:8000/upload";
+  //   const formData = new FormData();
+  //   formData.append("file", file);
+  //   const config = {
+  //     headers: {
+  //       "content-type": "multipart/form-data",
+  //     },
+  //   };
+  //   return axios.post(url, formData, config);
+  // }
 
   render() {
     return (
       <div>
         <Card>
           <CardBody>
-            <h2 className="text-center mb-4">UploadFile</h2>
+            {/* <h2 className="text-center mb-4">UploadFile</h2> */}
             <Form
               className="File-Upload-Form mb-3"
               onSubmit={this.onFormSubmit}
@@ -88,7 +103,11 @@ class UploadFile extends React.Component {
                   onChange={this.onChange}
                 />
               </FormGroup>
-              <button type="submit" className="w-100 c-blue btn btn-secondary">
+              <button
+                type="submit"
+                onClick={this.onClick}
+                className="w-100 c-blue btn btn-secondary"
+              >
                 Upload
               </button>
             </Form>
