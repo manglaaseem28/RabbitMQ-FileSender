@@ -22,34 +22,34 @@ const connect = async () => {
       if (taskdesc[0] == "Task_id") {
         channel.ack(message);
       } else {
-        // console.log(taskdesc)
-        await insertTaskDescription(
-          parseInt(taskdesc[0]),
-          taskdesc[1],
-          taskdesc[2]
-        );
+        console.log(taskdesc)
+        // await insertTaskDescription(
+        //   parseInt(taskdesc[0]),
+        //   taskdesc[1],
+        //   taskdesc[2]
+        // );
         channel.ack(message);
       }
     });
 
     // task distribution
 
-    await channel.assertQueue("taskdistribution");
-    // channel.prefetch(1);
+    // await channel.assertQueue("taskdistribution");
+    // // channel.prefetch(1);
 
-    await channel.consume("taskdistribution", async (message) => {
-      const taskdesc = message.content.toString().split(",");
-      if (taskdesc[0] == "Task_id") {
-        channel.ack(message);
-      } else {
-        // console.log(taskdesc)
-        await insertTaskDistribution(
-          parseInt(taskdesc[0]),
-          parseInt(taskdesc[1])
-        );
-        channel.ack(message);
-      }
-    });
+    // await channel.consume("taskdistribution", async (message) => {
+    //   const taskdesc = message.content.toString().split(",");
+    //   if (taskdesc[0] == "Task_id") {
+    //     channel.ack(message);
+    //   } else {
+    //     // console.log(taskdesc)
+    //     await insertTaskDistribution(
+    //       parseInt(taskdesc[0]),
+    //       parseInt(taskdesc[1])
+    //     );
+    //     channel.ack(message);
+    //   }
+    // });
 
     console.log(`Waiting for Message.....`);
   } catch (exception) {

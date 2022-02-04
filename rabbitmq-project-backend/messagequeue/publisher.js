@@ -8,8 +8,9 @@ const connectPublisher = async (csvPath) => {
     const channel = await connection.createChannel();
     await channel.assertQueue("taskdescription");
 
-    const csvFile1 = "../data/taskfiles/taskdescription.csv";
-    lineReader.eachLine(csvFile1, async (line, last, cb) => {
+    // const csvFile1 = "../data/taskfiles/taskdescription.csv";
+
+    lineReader.eachLine(csvPath, async (line, last, cb) => {
       // console.log(line, last)
       channel.sendToQueue("taskdescription", Buffer.from(line), {
         persistent: true,
