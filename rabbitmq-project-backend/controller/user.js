@@ -1,5 +1,4 @@
 // Register an Employee--- ADD User
-const { employee } = require("../config/config");
 const { executeQuery } = require("../service/db");
 
 const authenticateUser = async (req, res, next) => {

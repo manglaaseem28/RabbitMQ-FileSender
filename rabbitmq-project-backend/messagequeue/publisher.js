@@ -2,9 +2,7 @@ const lineReader = require("line-reader");
 const amqp = require("amqplib");
 const { RabbitMQConn } = require("../config/config");
 
-// const msg = {number: process.argv[2]}
-
-const connect = async () => {
+const connectPublisher = async (csvPath) => {
   try {
     const connection = await amqp.connect(RabbitMQConn);
     const channel = await connection.createChannel();
@@ -19,16 +17,16 @@ const connect = async () => {
       cb();
     });
 
-    await channel.assertQueue("taskdistribution");
+    // await channel.assertQueue("taskdistribution");
 
-    const csvFile2 = "../data/taskfiles/taskdistribution.csv";
-    lineReader.eachLine(csvFile2, async (line, last, cb) => {
-      // console.log(line, last)
-      channel.sendToQueue("taskdistribution", Buffer.from(line), {
-        persistent: true,
-      });
-      cb();
-    });
+    // const csvFile2 = "../data/taskfiles/taskdistribution.csv";
+    // lineReader.eachLine(csvFile2, async (line, last, cb) => {
+    //   // console.log(line, last)
+    //   channel.sendToQueue("taskdistribution", Buffer.from(line), {
+    //     persistent: true,
+    //   });
+    //   cb();
+    // });
 
     console.log(`Job sent successfully`);
   } catch (exception) {
@@ -36,4 +34,4 @@ const connect = async () => {
   }
 };
 
-connect();
+module.exports = connectPublisher

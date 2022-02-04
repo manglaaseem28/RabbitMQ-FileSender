@@ -1,4 +1,6 @@
 const router = require("express").Router();
+const multer = require('multer');
+const processData = require("../controller/receivefile");
 
 const {
   sendUserData,
@@ -13,6 +15,7 @@ const {
   authenticateUser,
 } = require("../controller/user");
 const app = require("../server");
+const upload = multer({dest:'tmp/csv/'});
 
 router.get("/userData", authenticateToken, sendUserData);
 
@@ -27,6 +30,8 @@ router.get("/alluser", getEmployes);
 router.post("/login", authenticateUser, authoriseUser);
 
 router.post("/token", refreshAccessToken);
+
+router.post("/sendfile", upload.single('file'), processData)
 
 router.delete("/logout", logout);
 
