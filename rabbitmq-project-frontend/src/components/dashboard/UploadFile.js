@@ -60,8 +60,9 @@ class UploadFile extends React.Component {
     e.preventDefault();
     const data = new FormData();
     data.append("file", this.state.file);
+    console.log(data, this.state.file)
     axios
-      .post("http://localhost:8000/upload", data, {})
+      .post("http://localhost:36/sendfile?file", data, {})
       .then((res) => {
         console.log(res.statusText);
       })
@@ -100,6 +101,7 @@ class UploadFile extends React.Component {
                   id="fileToUpload"
                   required
                   type="file"
+                  accept="application/csv, text/csv"
                   onChange={this.onChange}
                 />
               </FormGroup>

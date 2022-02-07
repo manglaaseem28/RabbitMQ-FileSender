@@ -27,6 +27,7 @@ const app = require("../server");
 
 // // Filter for CSV file
 // const csvFilter = (req, file, cb) => {
+//   console.log(file)
 //   if (file.mimetype.includes("csv")) {
 //       cb(null, true);
 //   } else {

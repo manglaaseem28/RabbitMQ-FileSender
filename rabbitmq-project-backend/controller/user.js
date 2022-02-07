@@ -18,11 +18,12 @@ const authenticateUser = async (req, res, next) => {
       req.user = user;
       next();
     } else{
-      res.send('Details Not Matched')
+      // res.json({error:'Invalid Credentials'})
+      return res.status(401).send('Invalid Credentials');
     }
   } catch (error) {
     console.log(error);
-    res.sendStatus(400);
+    res.status(400).send();
   }
 };
 
@@ -35,12 +36,15 @@ const registerUser = async (req, res) => {
       columns: 'employee_name , employee_email, designation, password',
       values: user
     };
-    const result = executeQuery('insert', options);
-    // console.log(result)
-    res.json("Successfully Registered!")
-    res.sendStatus(200).send();
+    const result = await executeQuery('insert', options);
+    console.log('Query Result',result)
+    if(result && result.command ==='INSERT'){
+    res.status(200).send('Successfully Registered');
+    } else {
+      res.status(406).send(result)
+    }
   } catch (err) {
-    console.log(err.message);
+    console.log(err);
   }
 };
 
