@@ -1,5 +1,5 @@
 import React, { useState } from "react";
-import { Alert, Card, CardBody, Form, FormGroup, Input, Label, Spinner } from "reactstrap";
+import { Alert, Button, Card, CardBody, Form, FormGroup, Input, Label, Spinner } from "reactstrap";
 import { registerUser } from "../../service/auth.service";
 
 function SignUp(props) {
@@ -126,9 +126,9 @@ function SignUp(props) {
                 type="password"
               />
             </FormGroup>
-            <button type="submit" className="w-100 c-blue btn btn-secondary">
+            <Button color="danger" type="submit" className="w-100 c-blue btn btn-secondary">
               Register
-            </button>
+            </Button>
           </Form>
           <div className="w-100 text-center mt-2">
             Don't have an account?&nbsp;&nbsp;&nbsp;

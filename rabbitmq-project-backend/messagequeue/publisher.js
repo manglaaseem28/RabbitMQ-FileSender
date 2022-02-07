@@ -7,6 +7,7 @@ const connectPublisher = async (csvPath) => {
     const connection = await amqp.connect(RabbitMQConn);
     const channel = await connection.createChannel();
     await channel.assertQueue("taskdescription");
+    
 
     // const csvFile1 = "../data/taskfiles/taskdescription.csv";
 
@@ -30,8 +31,10 @@ const connectPublisher = async (csvPath) => {
     // });
 
     console.log(`Job sent successfully`);
+    return {status:true}
   } catch (exception) {
-    console.log(exception);
+    console.log('Publisher Exception', exception);
+    return {status: false, error: exception}
   }
 };
 
