@@ -58,6 +58,8 @@ function SignUp(props) {
     seterrors(errors);
     setshouldSubmit(
       errors.designation || errors.email || errors.name || errors.password
+        ? true
+        : false
     );
   };
 
@@ -83,7 +85,7 @@ function SignUp(props) {
   };
 
   const handleSubmit = async (event) => {
-    if (!shouldSubmit) return;
+    // if (!shouldSubmit) return;
     setshowmsg(true);
     event.preventDefault();
     console.log(initialState);

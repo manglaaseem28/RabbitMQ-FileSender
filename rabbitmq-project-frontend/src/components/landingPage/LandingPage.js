@@ -23,6 +23,9 @@ function LandingPage(props) {
 
   return (
     <div>
+      <div>
+      <h1>Rabbit</h1>
+      </div>
       <Container
         className="d-flex align-items-center justify-content-center"
         style={{ minHeight: "100vh" }}

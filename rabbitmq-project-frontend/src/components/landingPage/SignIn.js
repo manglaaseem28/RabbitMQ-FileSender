@@ -50,7 +50,7 @@ function SignIn(props) {
         "Password must be a minimum of 8 characters including number, Upper, Lower And one special character.";
 
     seterrors(errors);
-    setshouldSubmit(errors.email || errors.password);
+    setshouldSubmit(errors.email || errors.password ? true : false);
   };
 
   const responseView = (
@@ -75,7 +75,7 @@ function SignIn(props) {
   };
 
   const handleSubmit = async (event) => {
-    if (!shouldSubmit) return;
+    // if (!shouldSubmit) return;
     setshowmsg(true);
     event.preventDefault();
     console.log(initialState);
