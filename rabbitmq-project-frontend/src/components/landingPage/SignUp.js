@@ -1,33 +1,68 @@
 import React, { useState } from "react";
-import { Card, CardBody, Form, FormGroup, Input, Label } from "reactstrap";
+import { Alert, Button, Card, CardBody, Form, FormGroup, Input, Label, Spinner } from "reactstrap";
 import { registerUser } from "../../service/auth.service";
 
-
 function SignUp(props) {
-  const [initialState, setState] = useState(
-    {
-        email:'',
-        password: '',
-        name: '',
-        designation: ''
-    }
-);
+  const [initialState, setState] = useState({
+    email: "",
+    password: "",
+    name: "",
+    designation: "",
+  });
 
-const handleInputChange = (event) => {
+  const [response, setresponse] = useState({
+    isLoading: true,
+    isRegistered: false,
+    errMsg: "",
+  });
+
+  const [showmsg, setshowmsg] = useState(false);
+
+  const responseView = <>
+  {
+    response.isLoading ? 
+    <Spinner />:
+    response.isRegistered?
+    <Alert>Successfully Registered</Alert>:
+    <Alert>{response.errMsg}</Alert>
+  }
+  </>;
+
+  const handleInputChange = (event) => {
     const name = event.target.name;
-    const value = event.target.value
+    const value = event.target.value;
     setState({
-        ...initialState,
-        [name]: value
-    })
-}
+      ...initialState,
+      [name]: value,
+    });
+  };
 
-const handleSubmit = (event) => {
+  const handleSubmit = async (event) => {
+    setshowmsg(true)
     event.preventDefault();
-    console.log(initialState)
-    registerUser(initialState)
-    setState({email:'', password: '', name: '', designation: ''});
-}
+    console.log(initialState);
+    await registerUser(initialState)
+      .then((result) => {
+        console.log(result);
+
+        if (result.status === 200) {
+          setresponse({
+            isLoading: false,
+            isRegistered: true,
+          });
+          // setState({email:'', password: '', name: '', designation: ''});
+        } else {
+          setresponse({
+            isLoading: false,
+            isRegistered: false,
+            errMsg: result.data.detail
+          })
+        }
+      })
+      .catch((err) => {
+        console.log(err);
+      });
+  };
 
   return (
     <div>
@@ -35,7 +70,7 @@ const handleSubmit = (event) => {
         <CardBody>
           <h2 className="text-center mb-4">Sign Up</h2>
           <Form className="Sign-Up-Form mb-3" onSubmit={handleSubmit}>
-          <FormGroup>
+            <FormGroup>
               <Label htmlFor="name" className="form-label">
                 Name
               </Label>
@@ -91,18 +126,19 @@ const handleSubmit = (event) => {
                 type="password"
               />
             </FormGroup>
-            <button type="submit" className="w-100 c-blue btn btn-secondary">
-              Sign In
-            </button>
+            <Button color="danger" type="submit" className="w-100 c-blue btn btn-secondary">
+              Register
+            </Button>
           </Form>
           <div className="w-100 text-center mt-2">
-              Don't have an account?&nbsp;&nbsp;&nbsp;
-              <button className="regB" onClick={props.logIn}>
-                &nbsp;Sign In
-              </button>
-            </div>
+            Don't have an account?&nbsp;&nbsp;&nbsp;
+            <button className="regB" onClick={props.logIn}>
+              &nbsp;Sign In
+            </button>
+          </div>
         </CardBody>
       </Card>
+      {showmsg && <div>{responseView}</div>}
     </div>
   );
 }

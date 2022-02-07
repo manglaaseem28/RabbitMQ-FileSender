@@ -1,41 +1,81 @@
 import React, { useState } from "react";
-import { Card, CardBody, Form, FormGroup, Input, Label } from "reactstrap";
+import {
+  Alert,
+  Card,
+  CardBody,
+  Form,
+  FormGroup,
+  Input,
+  Label,
+  Spinner,
+} from "reactstrap";
 import { logIn } from "../../service/auth.service";
 
 function SignIn(props) {
+  const [initialState, setState] = useState({
+    email: "",
+    password: "",
+  });
 
-    const [initialState, setState] = useState(
-        {
-            email:'',
-            password: ''
-        }
-    );
+  const [response, setresponse] = useState({
+    isLoading: true,
+    errMsg: "",
+    isAuthenticated: false,
+  });
 
-    const handleInputChange = (event) => {
-        const name = event.target.name;
-        const value = event.target.value
-        setState({
-            ...initialState,
-            [name]: value
-        })
-    }
+  const [showmsg, setshowmsg] = useState(false);
 
-    const handleSubmit = (event) => {
-        event.preventDefault();
-        console.log(initialState)
+  const responseView = <>
+  {
+    response.isLoading ? 
+    <Spinner />:
+    response.isAuthenticated?
+    <Alert>Successfully Authenticated!</Alert>:
+    <Alert>{response.errMsg}</Alert>
+  }
+  </>;
 
-        logIn(initialState).then(
-          () => {
-          props.history('/dashboard');
+  const handleInputChange = (event) => {
+    const name = event.target.name;
+    const value = event.target.value;
+    setState({
+      ...initialState,
+      [name]: value,
+    });
+  };
+
+  const handleSubmit = async (event) => {
+    setshowmsg(true);
+    event.preventDefault();
+    console.log(initialState);
+
+    await logIn(initialState).then(
+      (result) => {
+        // console.log('Authentication Result', result);
+
+        if (result.status === 200) {
+          setresponse({
+            isLoading: false,
+            isAuthenticated: true,
+          });
+          setState({ email: "", password: "" });
+          props.history("/dashboard");
+          console.log("After Dashboard");
           window.location.reload();
-        },
-        (error) => {
-          console.error(error);
+        } else {
+          setresponse({
+            isLoading: false,
+            isAuthenticated: false,
+            errMsg: result.data,
+          });
         }
-        )
-
-        setState({email:'', password: ''});
-    }
+      },
+      (error) => {
+        console.error(error);
+      }
+    );
+    console.log(response)
+  };
 
   return (
     <div>
@@ -76,13 +116,14 @@ function SignIn(props) {
             </button>
           </Form>
           <div className="w-100 text-center mt-2">
-              Don't have an account?&nbsp;&nbsp;&nbsp;
-              <button className="regB" onClick={props.register}>
-                &nbsp;Sign Up
-              </button>
-            </div>
+            Don't have an account?&nbsp;&nbsp;&nbsp;
+            <button className="regB" onClick={props.register}>
+              &nbsp;Sign Up
+            </button>
+          </div>
         </CardBody>
       </Card>
+      {showmsg && <div>{responseView}</div>}
     </div>
   );
 }

@@ -2,8 +2,7 @@ const amqp = require("amqplib");
 require("dotenv").config();
 
 const { RabbitMQConn, task_desc, task_dist } = require("../config/config");
-
-const { insertQuery } = require("../service/db");
+const { executeQuery } = require("../service/db");
 
 console.log(RabbitMQConn);
 const connect = async () => {
@@ -22,7 +21,7 @@ const connect = async () => {
       if (taskdesc[0] == "Task_id") {
         channel.ack(message);
       } else {
-        // console.log(taskdesc)
+        console.log(taskdesc)
         await insertTaskDescription(
           parseInt(taskdesc[0]),
           taskdesc[1],
@@ -34,22 +33,22 @@ const connect = async () => {
 
     // task distribution
 
-    await channel.assertQueue("taskdistribution");
-    // channel.prefetch(1);
+    // await channel.assertQueue("taskdistribution");
+    // // channel.prefetch(1);
 
-    await channel.consume("taskdistribution", async (message) => {
-      const taskdesc = message.content.toString().split(",");
-      if (taskdesc[0] == "Task_id") {
-        channel.ack(message);
-      } else {
-        // console.log(taskdesc)
-        await insertTaskDistribution(
-          parseInt(taskdesc[0]),
-          parseInt(taskdesc[1])
-        );
-        channel.ack(message);
-      }
-    });
+    // await channel.consume("taskdistribution", async (message) => {
+    //   const taskdesc = message.content.toString().split(",");
+    //   if (taskdesc[0] == "Task_id") {
+    //     channel.ack(message);
+    //   } else {
+    //     // console.log(taskdesc)
+    //     await insertTaskDistribution(
+    //       parseInt(taskdesc[0]),
+    //       parseInt(taskdesc[1])
+    //     );
+    //     channel.ack(message);
+    //   }
+    // });
 
     console.log(`Waiting for Message.....`);
   } catch (exception) {
@@ -61,7 +60,14 @@ connect();
 
 const insertTaskDescription = async (task_id, taskTitle, taskDescription) => {
   try {
-    await insertQuery(task_desc, [task_id, taskTitle, taskDescription]);
+    const values = `'${task_id}', '${taskTitle}', '${taskDescription}'`
+    const options={
+      table: 'taskdesc',
+      columns: 'task_id, task_title, task_description',
+      values: values
+
+    }
+    const result = await executeQuery('insert', options)
   } catch (exe) {
     console.error(exe);
   }
