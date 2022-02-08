@@ -36,6 +36,9 @@ import NavDash from "./NavDash";
 import ShowData from "./ShowData";
 import UploadFile from "./UploadFile";
 
+/**
+ * Dashboard component 
+ */
 class Dashboard extends React.Component {
   constructor(props) {
     super(props);

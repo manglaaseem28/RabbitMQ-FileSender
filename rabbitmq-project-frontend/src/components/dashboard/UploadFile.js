@@ -11,7 +11,9 @@ import {
   Spinner,
 } from "reactstrap";
 import { uploadFile } from "../../service/file.service";
-
+/**
+ * Component for choosing and uploading file 
+ */
 class UploadFile extends React.Component {
   constructor(props) {
     super(props);
