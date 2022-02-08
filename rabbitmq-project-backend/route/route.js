@@ -1,6 +1,7 @@
 const router = require("express").Router();
 const multer = require("multer");
 const processData = require("../controller/receivefile");
+const { sendData } = require("../controller/senddata");
 
 const {
   sendUserData,
@@ -55,5 +56,7 @@ router.post("/token", refreshAccessToken);
 router.post("/sendfile", upload.single("file"), processData);
 
 router.delete("/logout", logout);
+
+router.post("/senddata", sendData)
 
 module.exports = router;

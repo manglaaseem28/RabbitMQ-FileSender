@@ -16,3 +16,18 @@ export const uploadFile = async (fileData) => {
     });
   return response;
 };
+
+export const fetchdata = async () => {
+  var response;
+  await axios
+    .post(apiURL + "/senddata")
+    .then((res) => {
+    //   console.log(res);
+      response = res;
+    })
+    .catch((e) => {
+    //   console.log(e.response);
+      response = e.response;
+    });
+  return response;
+}
