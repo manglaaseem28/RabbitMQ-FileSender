@@ -1,16 +1,22 @@
-import React, { useState } from "react";
+import React, { useEffect, useState } from "react";
 import {
   Alert,
+  Button,
   Card,
   CardBody,
   Form,
+  FormFeedback,
   FormGroup,
   Input,
   Label,
   Spinner,
 } from "reactstrap";
 import { logIn } from "../../service/auth.service";
-
+/**
+ * Used for signing in
+ * @param {object} props 
+ * @returns 
+ */
 function SignIn(props) {
   const [initialState, setState] = useState({
     email: "",
@@ -24,17 +30,50 @@ function SignIn(props) {
   });
 
   const [showmsg, setshowmsg] = useState(false);
+  const [errors, seterrors] = useState({
+    email: "",
+    password: "",
+  });
+  const [shouldSubmit, setshouldSubmit] = useState(false);
 
-  const responseView = <>
-  {
-    response.isLoading ? 
-    <Spinner />:
-    response.isAuthenticated?
-    <Alert>Successfully Authenticated!</Alert>:
-    <Alert>{response.errMsg}</Alert>
-  }
-  </>;
+  useEffect(() => {
+    console.log("Use Effect Called");
+    validateErrors();
+  }, [initialState]);
 
+  const validateErrors = () => {
+    const { email, password } = initialState;
+    const reg_password =
+      /^(?=.*[a-z])(?=.*[A-Z])(?=.*[0-9])(?=.*[!@#\$%\^&\*])(?=.{8,})/;
+    var errors = { email: "", password: "" };
+
+    if (email && email.split("").filter((x) => x === "@").length !== 1)
+      errors.email = "Invalid Email Syntax";
+    if (password && !reg_password.test(password))
+      errors.password =
+        "Password must be a minimum of 8 characters including number, Upper, Lower And one special character.";
+
+    seterrors(errors);
+    setshouldSubmit(errors.email || errors.password ? true : false);
+  };
+/**
+ * client side validation
+ */
+  const responseView = (
+    <>
+      {response.isLoading ? (
+        <Spinner />
+      ) : response.isAuthenticated ? (
+        <Alert color="success">Successfully Authenticated!</Alert>
+      ) : (
+        <Alert color="danger">{response.errMsg}</Alert>
+      )}
+    </>
+  );
+/**
+ * Event Handler function for sign in form 
+ * @param {} event 
+ */
   const handleInputChange = (event) => {
     const name = event.target.name;
     const value = event.target.value;
@@ -43,8 +82,12 @@ function SignIn(props) {
       [name]: value,
     });
   };
-
+/**
+ * Event handler function for submit button 
+ * @param {*} event 
+ */
   const handleSubmit = async (event) => {
+    // if (!shouldSubmit) return;
     setshowmsg(true);
     event.preventDefault();
     console.log(initialState);
@@ -74,7 +117,7 @@ function SignIn(props) {
         console.error(error);
       }
     );
-    console.log(response)
+    console.log(response);
   };
 
   return (
@@ -94,8 +137,11 @@ function SignIn(props) {
                 value={initialState.email}
                 onChange={handleInputChange}
                 required
+                invalid={errors.email}
+                valid={!errors.email}
                 type="email"
               />
+              <FormFeedback>{errors.email}</FormFeedback>
             </FormGroup>
             <FormGroup>
               <label htmlFor="userPassword" className="form-label">
@@ -108,18 +154,26 @@ function SignIn(props) {
                 value={initialState.password}
                 onChange={handleInputChange}
                 required
+                invalid={errors.password}
+                valid={!errors.password}
                 type="password"
               />
+              <FormFeedback>{errors.password}</FormFeedback>
             </FormGroup>
-            <button type="submit" className="w-100 c-blue btn btn-secondary">
+            <Button
+              color="primary"
+              type="submit"
+              disabled={shouldSubmit}
+              className="w-100"
+            >
               Sign In
-            </button>
+            </Button>
           </Form>
           <div className="w-100 text-center mt-2">
             Don't have an account?&nbsp;&nbsp;&nbsp;
-            <button className="regB" onClick={props.register}>
+            <Button color="info" className="regB" onClick={props.register}>
               &nbsp;Sign Up
-            </button>
+            </Button>
           </div>
         </CardBody>
       </Card>

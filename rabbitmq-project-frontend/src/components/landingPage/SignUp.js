@@ -1,7 +1,22 @@
-import React, { useState } from "react";
-import { Alert, Button, Card, CardBody, Form, FormGroup, Input, Label, Spinner } from "reactstrap";
+import React, { useEffect, useState } from "react";
+import {
+  Alert,
+  Button,
+  Card,
+  CardBody,
+  Form,
+  FormFeedback,
+  FormGroup,
+  Input,
+  Label,
+  Spinner,
+} from "reactstrap";
 import { registerUser } from "../../service/auth.service";
-
+/**
+ * Used for signing up  
+ * @param {*} props 
+ * @returns 
+ */
 function SignUp(props) {
   const [initialState, setState] = useState({
     email: "",
@@ -17,17 +32,58 @@ function SignUp(props) {
   });
 
   const [showmsg, setshowmsg] = useState(false);
+  const [errors, seterrors] = useState({
+    email: "",
+    password: "",
+    name: "",
+    designation: "",
+  });
+  const [shouldSubmit, setshouldSubmit] = useState(false);
 
-  const responseView = <>
-  {
-    response.isLoading ? 
-    <Spinner />:
-    response.isRegistered?
-    <Alert>Successfully Registered</Alert>:
-    <Alert>{response.errMsg}</Alert>
-  }
-  </>;
+  useEffect(() => {
+    console.log("Use Effect Called");
+    validateErrors();
+  }, [initialState]);
 
+  const validateErrors = () => {
+    const { email, password, name, designation } = initialState;
+    const reg_password =
+      /^(?=.*[a-z])(?=.*[A-Z])(?=.*[0-9])(?=.*[!@#\$%\^&\*])(?=.{8,})/;
+    var errors = { email: "", password: "", name: "", designation: "" };
+
+    if (email && email.split("").filter((x) => x === "@").length !== 1)
+      errors.email = "Invalid Email Syntax";
+    if (password && !reg_password.test(password))
+      errors.password =
+        "Password must be a minimum of 8 characters including number, Upper, Lower And one special character.";
+    if (name && name.length < 2)
+      errors.name = "Name should be greater than 2 characters";
+
+    seterrors(errors);
+    setshouldSubmit(
+      errors.designation || errors.email || errors.name || errors.password
+        ? true
+        : false
+    );
+  };
+/**
+ * client side validation for sign up page 
+ */
+  const responseView = (
+    <>
+      {response.isLoading ? (
+        <Spinner />
+      ) : response.isRegistered ? (
+        <Alert color="success">Successfully Registered</Alert>
+      ) : (
+        <Alert color="danger">{response.errMsg}</Alert>
+      )}
+    </>
+  );
+/**
+ * Event handler function for sign up form 
+ * @param {*} event 
+ */
   const handleInputChange = (event) => {
     const name = event.target.name;
     const value = event.target.value;
@@ -36,9 +92,13 @@ function SignUp(props) {
       [name]: value,
     });
   };
-
+/**
+ * Event handler function for submit button 
+ * @param {*} event 
+ */
   const handleSubmit = async (event) => {
-    setshowmsg(true)
+    // if (!shouldSubmit) return;
+    setshowmsg(true);
     event.preventDefault();
     console.log(initialState);
     await registerUser(initialState)
@@ -55,8 +115,8 @@ function SignUp(props) {
           setresponse({
             isLoading: false,
             isRegistered: false,
-            errMsg: result.data.detail
-          })
+            errMsg: result.data.detail,
+          });
         }
       })
       .catch((err) => {
@@ -81,8 +141,11 @@ function SignUp(props) {
                 value={initialState.name}
                 onChange={handleInputChange}
                 required
+                invalid={errors.name}
+                valid={!errors.name}
                 type="text"
               />
+              <FormFeedback>{errors.name}</FormFeedback>
             </FormGroup>
             <FormGroup>
               <Label htmlFor="email" className="form-label">
@@ -95,8 +158,11 @@ function SignUp(props) {
                 value={initialState.email}
                 onChange={handleInputChange}
                 required
+                invalid={errors.email}
+                valid={!errors.email}
                 type="email"
               />
+              <FormFeedback>{errors.email}</FormFeedback>
             </FormGroup>
             <FormGroup>
               <Label htmlFor="designation" className="form-label">
@@ -109,8 +175,11 @@ function SignUp(props) {
                 value={initialState.designation}
                 onChange={handleInputChange}
                 required
+                invalid={errors.designation}
+                valid={!errors.designation}
                 type="text"
               />
+              <FormFeedback>{errors.designation}</FormFeedback>
             </FormGroup>
             <FormGroup>
               <label htmlFor="userPassword" className="form-label">
@@ -123,18 +192,26 @@ function SignUp(props) {
                 value={initialState.password}
                 onChange={handleInputChange}
                 required
+                invalid={errors.password}
+                valid={!errors.password}
                 type="password"
               />
+              <FormFeedback>{errors.password}</FormFeedback>
             </FormGroup>
-            <Button color="danger" type="submit" className="w-100 c-blue btn btn-secondary">
+            <Button
+              color="danger"
+              type="submit"
+              disabled={shouldSubmit}
+              className="w-100"
+            >
               Register
             </Button>
           </Form>
           <div className="w-100 text-center mt-2">
             Don't have an account?&nbsp;&nbsp;&nbsp;
-            <button className="regB" onClick={props.logIn}>
+            <Button color="info" className="regB" onClick={props.logIn}>
               &nbsp;Sign In
-            </button>
+            </Button>
           </div>
         </CardBody>
       </Card>

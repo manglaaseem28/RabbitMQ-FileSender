@@ -1,0 +1,8 @@
+.dashboard{
+  background:rgb(223, 223, 230);
+  font-family: 'Roboto', Oxygen, Ubuntu, Cantarell, 'Open Sans', 'Helvetica Neue', sans-serif;
+}
+.table-container{
+    max-height: 500px;
+    overflow: auto;
+  }

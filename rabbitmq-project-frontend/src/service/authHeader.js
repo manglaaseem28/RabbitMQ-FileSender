@@ -1,3 +1,7 @@
+/**
+ * Adds JWT token in the header
+ * @returns {object} returns authorization token 
+ */
 export default function authHeader() {
     const user = JSON.parse(localStorage.getItem('user'));
   

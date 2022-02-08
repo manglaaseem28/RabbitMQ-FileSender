@@ -33,8 +33,12 @@
 
 import React from "react";
 import NavDash from "./NavDash";
+import ShowData from "./ShowData";
 import UploadFile from "./UploadFile";
 
+/**
+ * Dashboard component 
+ */
 class Dashboard extends React.Component {
   constructor(props) {
     super(props);
@@ -46,10 +50,13 @@ class Dashboard extends React.Component {
 
   render() {
     return (
-      <div>
+      <div className='dashboard'>
         <NavDash/>
         <h1 className="text-center mb-4">Dashboard</h1>
         <UploadFile/>
+        <div>
+          <ShowData/>
+        </div>
       </div>
 
     );

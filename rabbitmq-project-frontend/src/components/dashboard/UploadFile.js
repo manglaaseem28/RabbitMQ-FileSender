@@ -1,5 +1,4 @@
 import React from "react";
-import axios from "axios";
 import {
   Alert,
   Button,
@@ -12,7 +11,9 @@ import {
   Spinner,
 } from "reactstrap";
 import { uploadFile } from "../../service/file.service";
-
+/**
+ * Component for choosing and uploading file 
+ */
 class UploadFile extends React.Component {
   constructor(props) {
     super(props);
@@ -43,7 +44,7 @@ class UploadFile extends React.Component {
     await uploadFile(data)
       .then((result) => {
         console.log(result);
-        if (result.status == 200) {
+        if (result.status === 200) {
           this.setState({
             response: { isLoading: false, fileloaded: true },
             file: null,
@@ -71,9 +72,9 @@ class UploadFile extends React.Component {
         {response.isLoading ? (
           <Spinner />
         ) : response.fileloaded ? (
-          <Alert>File Uploaded Successfully</Alert>
+          <Alert color="success">File Uploaded Successfully</Alert>
         ) : (
-          <Alert>{response.errMsg}</Alert>
+          <Alert color="danger">{response.errMsg}</Alert>
         )}
       </>
     );
