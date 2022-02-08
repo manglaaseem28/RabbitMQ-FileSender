@@ -47,7 +47,7 @@ class Dashboard extends React.Component {
 
   render() {
     return (
-      <div>
+      <div className='dashboard'>
         <NavDash/>
         <h1 className="text-center mb-4">Dashboard</h1>
         <UploadFile/>
