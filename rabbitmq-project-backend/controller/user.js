@@ -1,6 +1,12 @@
 // Register an Employee--- ADD User
 const { executeQuery } = require("../service/db");
 
+/**
+ * Used to authenticate user credentials by running select query
+ * @param {object} req
+ * @param {object} res
+ * @returns {object} tells the status of the user
+ */
 const authenticateUser = async (req, res, next) => {
   try {
     const email = req.body.email;
@@ -12,14 +18,14 @@ const authenticateUser = async (req, res, next) => {
       conditions: `employee_email='${email}' AND password='${password}'`,
     };
     const result = await executeQuery("select", options);
-    
+
     if (result.rows[0].count == "1") {
       console.log("Authentication Successful");
       req.user = user;
       next();
-    } else{
+    } else {
       // res.json({error:'Invalid Credentials'})
-      return res.status(401).send('Invalid Credentials');
+      return res.status(401).send("Invalid Credentials");
     }
   } catch (error) {
     console.log(error);
@@ -29,19 +35,19 @@ const authenticateUser = async (req, res, next) => {
 
 const registerUser = async (req, res) => {
   try {
-    const user = `'${req.body.name}', '${req.body.email}','${req.body.designation}', '${req.body.password}'`
-    
+    const user = `'${req.body.name}', '${req.body.email}','${req.body.designation}', '${req.body.password}'`;
+
     const options = {
       table: "employee",
-      columns: 'employee_name , employee_email, designation, password',
-      values: user
+      columns: "employee_name , employee_email, designation, password",
+      values: user,
     };
-    const result = await executeQuery('insert', options);
-    console.log('Query Result',result)
-    if(result && result.command ==='INSERT'){
-    res.status(200).send('Successfully Registered');
+    const result = await executeQuery("insert", options);
+    console.log("Query Result", result);
+    if (result && result.command === "INSERT") {
+      res.status(200).send("Successfully Registered");
     } else {
-      res.status(406).send(result)
+      res.status(406).send(result);
     }
   } catch (err) {
     console.log(err);

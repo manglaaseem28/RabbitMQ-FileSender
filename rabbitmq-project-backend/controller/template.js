@@ -12,6 +12,13 @@ const sendUserData = (req, res) => {
 
 // Authentication
 
+/**
+ * Used to register user credentials into database
+ * @param {object} req
+ * @param {object} res
+ * @returns {object} returns the status of the entity
+ */
+
 const addUser = (req, res) => {
   const user = {
     name: req.body.name,
@@ -23,9 +30,23 @@ const addUser = (req, res) => {
   res.status(200).send();
 };
 
+/**
+ * Used to generate JWT Token for user
+ * @param {object} user
+ *
+ * @returns {object} returns the token
+ */
+
 const generateAccessToken = (user) => {
   return jwt.sign(user, process.env.ACCESS_TOKEN_SECRET, { expiresIn: "1m" });
 };
+
+/**
+ * used to authorize user by sending access & refresh tokens in header
+ * @param {object} req
+ * @param {object} res
+ * @returns {JSON} returns the access and refresh tokens
+ */
 
 const authoriseUser = (req, res) => {
   try {
@@ -41,6 +62,14 @@ const authoriseUser = (req, res) => {
   }
 };
 
+/**
+ * Used to verify whether signed user is accessing other routes
+ * @param {object} req
+ * @param {object} res
+ * @param {object} next
+ * @returns {object} tells the status whether user is valid or not
+ */
+
 const authenticateToken = (req, res, next) => {
   const authHeader = req.headers["authorization"];
   const token = authHeader && authHeader.split(" ")[1];
@@ -53,6 +82,13 @@ const authenticateToken = (req, res, next) => {
     next();
   });
 };
+
+/**
+ * Used to generate  a new access token after it expires
+ * @param {object} req
+ * @param {object} res
+ * @returns {JSON} returns new access token or any error with status code
+ */
 
 const refreshAccessToken = (req, res) => {
   const refreshToken = req.body.token;

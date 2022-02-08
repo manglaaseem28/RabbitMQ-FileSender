@@ -8,7 +8,7 @@ const dbConfig = {
   // user: process.env.DB_USER,
   // password: process.env.DB_PASS,
   user: "postgres",
-  password: "351",
+  password: "dp@1234",
   port: 5432,
   database: "employee_database",
 };
