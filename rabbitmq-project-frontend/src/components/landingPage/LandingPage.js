@@ -22,7 +22,10 @@ function LandingPage(props) {
   };
 
   return (
-    <div>
+    <div style={{background:'lightblue'}}>
+      <div className="d-flex align-items-center justify-content-center">
+      <h1>RabbitMQ-File Sender</h1>
+      </div>
       <Container
         className="d-flex align-items-center justify-content-center"
         style={{ minHeight: "100vh" }}
