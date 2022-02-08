@@ -10,6 +10,9 @@ import {
   Button} from 'reactstrap';
 import { logout } from '../../service/auth.service';
 
+/**
+ * Navbar component 
+ */
   class NavDash extends React.Component {
   constructor(props) {
     super(props);

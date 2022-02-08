@@ -3,7 +3,11 @@ import { useNavigate } from "react-router-dom";
 import { Container } from "reactstrap";
 import SignIn from "./SignIn";
 import SignUp from "./SignUp";
-
+/**
+ * Landing page component containing sign in and sign up
+ * @param {object} props 
+ * @returns {JSX} If user is already logged in then gets redirected otherwise sign in page is opened
+ */
 function LandingPage(props) {
   const history = useNavigate();
   const isAuthenticated = props.isAuthenticated;

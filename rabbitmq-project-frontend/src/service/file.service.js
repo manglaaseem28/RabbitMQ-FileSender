@@ -1,7 +1,11 @@
 import axios from "axios";
 
 const apiURL = process.env.REACT_APP_BACKEND_API;
-
+/**
+ * This function uploads the file and creates connection between frontend and backend 
+ * @param {file} fileData 
+ * @returns {object} response 
+ */
 export const uploadFile = async (fileData) => {
   var response;
   await axios

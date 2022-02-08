@@ -12,7 +12,11 @@ import {
   Spinner,
 } from "reactstrap";
 import { logIn } from "../../service/auth.service";
-
+/**
+ * Used for signing in
+ * @param {object} props 
+ * @returns 
+ */
 function SignIn(props) {
   const [initialState, setState] = useState({
     email: "",
@@ -52,7 +56,9 @@ function SignIn(props) {
     seterrors(errors);
     setshouldSubmit(errors.email || errors.password ? true : false);
   };
-
+/**
+ * client side validation
+ */
   const responseView = (
     <>
       {response.isLoading ? (
@@ -64,7 +70,10 @@ function SignIn(props) {
       )}
     </>
   );
-
+/**
+ * Event Handler function for sign in form 
+ * @param {} event 
+ */
   const handleInputChange = (event) => {
     const name = event.target.name;
     const value = event.target.value;
@@ -73,7 +82,10 @@ function SignIn(props) {
       [name]: value,
     });
   };
-
+/**
+ * Event handler function for submit button 
+ * @param {*} event 
+ */
   const handleSubmit = async (event) => {
     // if (!shouldSubmit) return;
     setshowmsg(true);
